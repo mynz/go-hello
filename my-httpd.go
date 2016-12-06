@@ -1,33 +1,56 @@
 package main
 
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"os"
+	// "log"
+	// "os"
 
-// import "log"
-
-func fib() func() int {
-	a, b := 0, 0
-	// a, b := 0, 1
-	// a, b := 1, 0
-
-	return func() int {
-
-		ret := a + b
-
-		a, b = ret, a
-
-		if b == 0 {
-			b = 1
-		}
-
-		return ret
-	}
-}
+	"compress/gzip"
+)
 
 func main() {
+	fmt.Println("Hello")
 
-	fn := fib()
-	for i := 0; i < 5; i++ {
-		fmt.Println("fib: ", fn())
+	/*
+	 * r, err := gzip.NewReader(os.Stdin)
+	 * if err != nil {
+	 *     panic(err)
+	 * }
+	 */
+
+	bs := bytes.NewBufferString("")
+	gw := gzip.NewWriter(bs)
+	io.WriteString(gw, "hello world")
+	gw.Close()
+
+	// fmt.Println("gw: ", gw)
+
+	// io.Copy(os.Stdout, bs)
+
+	// fmt.Println(bs.String())
+
+	gr, err := gzip.NewReader(bs)
+	if err != nil {
+		panic(err)
 	}
+	n, err := io.Copy(os.Stdout, gr)
+	fmt.Println("xxx")
+	fmt.Println("n: ", n, err)
+
+	// bs := make([]byte, 8)
+
+	/*
+	 * strings.
+	 * w.Write(bs)
+	 */
+
+	/*
+	 * b := make([]byte, 8)
+	 * r.Read(b)
+	 * fmt.Println("b: ", b)
+	 */
 
 }
