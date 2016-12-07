@@ -68,22 +68,22 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return nil
 }
 
-var _dataHogeTxt = []byte("\x1f\x8b\x08\x00\x00\x09\x6e\x88\x00\xff\xca\xc8\x4f\x4f\x05\x61\x5e\x2e\x40\x00\x00\x00\xff\xff\xee\x94\x93\xe3\x0a\x00\x00\x00")
+var _hogeTxt = []byte("\x1f\x8b\x08\x00\x00\x09\x6e\x88\x00\xff\xca\xc8\x4f\x4f\x05\x61\xdd\xb4\xd2\xf4\x44\x10\xe6\xe5\x02\x04\x00\x00\xff\xff\x17\x88\x5b\xa4\x13\x00\x00\x00")
 
-func dataHogeTxtBytes() ([]byte, error) {
+func hogeTxtBytes() ([]byte, error) {
 	return bindataRead(
-		_dataHogeTxt,
-		"data/hoge.txt",
+		_hogeTxt,
+		"hoge.txt",
 	)
 }
 
-func dataHogeTxt() (*asset, error) {
-	bytes, err := dataHogeTxtBytes()
+func hogeTxt() (*asset, error) {
+	bytes, err := hogeTxtBytes()
 	if err != nil {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "data/hoge.txt", size: 10, mode: os.FileMode(438), modTime: time.Unix(1481017813, 0)}
+	info := bindataFileInfo{name: "hoge.txt", size: 19, mode: os.FileMode(438), modTime: time.Unix(1481091192, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -140,7 +140,7 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"data/hoge.txt": dataHogeTxt,
+	"hoge.txt": hogeTxt,
 }
 
 // AssetDir returns the file names below a certain
@@ -183,9 +183,7 @@ type bintree struct {
 	Children map[string]*bintree
 }
 var _bintree = &bintree{nil, map[string]*bintree{
-	"data": &bintree{nil, map[string]*bintree{
-		"hoge.txt": &bintree{dataHogeTxt, map[string]*bintree{}},
-	}},
+	"hoge.txt": &bintree{hogeTxt, map[string]*bintree{}},
 }}
 
 // RestoreAsset restores an asset under the given directory
