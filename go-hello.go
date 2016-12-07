@@ -2,35 +2,28 @@ package main
 
 import (
 	"fmt"
-	"runtime"
-	"time"
+	"os"
 	// "sync"
 )
 
-func hoge(d time.Duration) <-chan time.Time {
-	fmt.Println("call hoge")
-	return time.After(d)
-}
-
-func fuga() chan bool {
-	ch := make(chan bool)
-	fmt.Println("call fuga")
-	return ch
-}
-
 func main() {
 	fmt.Println("hello")
-	// fmt.Println("NumGroutine", runtime.NumGoroutine())
 
-	fmt.Println("NumCPU", runtime.NumCPU())
+	f, err := os.Open("fuga.txt")
+	defer func() { println("closing"); f.Close() }()
 
-	select {
-	// case c := <-time.After(time.Second):
-	case c := <-hoge(time.Second):
-		fmt.Println("one:", c)
-	case <-fuga():
-		fmt.Println("two:")
+	println("f:", f)
+
+	if err != nil {
+		panic(err)
 	}
+
+	d, err := f.Stat()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(d)
 
 	fmt.Println("finish.")
 }
