@@ -2,28 +2,31 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"io/ioutil"
+	"net/http"
 	// "sync"
 )
 
 func main() {
 	fmt.Println("hello")
 
-	f, err := os.Open("fuga.txt")
-	defer func() { println("closing"); f.Close() }()
+	// url := "yahoo.co.jp"
+	url := "http://garbagecollection.org"
 
-	println("f:", f)
-
+	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
 	}
 
-	d, err := f.Stat()
-	if err != nil {
-		panic(err)
-	}
+	fmt.Println(resp)
 
-	fmt.Println(d)
+	// bs := make([]byte)
+	// bs := []byte{}
+	// resp.Body.Read(bs)
+
+	bs, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(string(bs))
 
 	fmt.Println("finish.")
 }

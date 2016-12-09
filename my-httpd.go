@@ -1,56 +1,35 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
-	"os"
-	// "log"
-	// "os"
-
-	"compress/gzip"
+	"net/http"
 )
+
+type MyHandle struct {
+	count int
+}
+
+func (h *MyHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.count++
+	fmt.Fprintf(w, "MyHandle: count: %d", h.count)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello\n")
+	fmt.Fprintf(w, "w: %v, r: %v\n", w, r)
+}
 
 func main() {
 	fmt.Println("Hello")
 
-	/*
-	 * r, err := gzip.NewReader(os.Stdin)
-	 * if err != nil {
-	 *     panic(err)
-	 * }
-	 */
+	// http.HandleFunc("/", handler)
+	http.Handle("/my", &MyHandle{})
 
-	bs := bytes.NewBufferString("")
-	gw := gzip.NewWriter(bs)
-	io.WriteString(gw, "hello world")
-	gw.Close()
+	fs := http.FileServer(http.Dir("."))
+	http.Handle("/file/", http.StripPrefix("/file", fs))
 
-	// fmt.Println("gw: ", gw)
-
-	// io.Copy(os.Stdout, bs)
-
-	// fmt.Println(bs.String())
-
-	gr, err := gzip.NewReader(bs)
+	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
 		panic(err)
 	}
-	n, err := io.Copy(os.Stdout, gr)
-	fmt.Println("xxx")
-	fmt.Println("n: ", n, err)
-
-	// bs := make([]byte, 8)
-
-	/*
-	 * strings.
-	 * w.Write(bs)
-	 */
-
-	/*
-	 * b := make([]byte, 8)
-	 * r.Read(b)
-	 * fmt.Println("b: ", b)
-	 */
-
 }
